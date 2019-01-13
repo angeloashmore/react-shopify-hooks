@@ -1,0 +1,58 @@
+{
+  "name": "react-shopify-hooks",
+  "version": "0.1.0",
+  "description": "Collection of React hooks for interacting with the Shopify API",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c",
+    "build:watch": "npm run build -- --watch",
+    "format": "prettier --write 'src/**/*.js' 'rollup.config.js' 'README.md'",
+    "prebuild": "rimraf dist",
+    "prepublish": "npm run build",
+    "release": "standard-version"
+  },
+  "homepage": "https://github.com/angeloashmore/react-shopify-hooks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angeloashmore/react-shopify-hooks.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "react-hooks",
+    "shopify"
+  ],
+  "author": "Angelo Ashmore",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "shopify-buy": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "@commitlint/cli": "^7.3.1",
+    "@commitlint/config-conventional": "^7.3.1",
+    "babel-plugin-lodash": "^3.3.4",
+    "husky": "^1.3.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.1.0",
+    "rollup-plugin-babel": "^4.3.0",
+    "standard-version": "^4.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0-alpha.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}
