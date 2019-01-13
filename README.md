@@ -20,7 +20,7 @@ npm install --save react-shopify-hooks
     <br/>
     <br/>
 - **Checkouts**
-  - (not implemented) [`useShopifyCart`](./docs/useShopifyCart) &mdash; manages a checkout
+  - (not implemented) [`useShopifyCheckout`](./docs/useShopifyCart) &mdash; manages a checkout
     <br/>
     <br/>
 - **Customers**
