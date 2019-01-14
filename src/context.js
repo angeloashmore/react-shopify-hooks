@@ -8,7 +8,7 @@ export const ShopifyProvider = ({
   storefrontAccessToken,
 }) => {
   const client = new ApolloClient({
-    uri: `https;//${shopName}.myshopify.com/api/graphql`,
+    uri: `https://${shopName}.myshopify.com/api/graphql`,
     headers: {
       'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
     },
