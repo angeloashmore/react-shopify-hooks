@@ -35,10 +35,6 @@ export const FragmentProduct = gql`
       }
     }
     variants(first: 250) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-      }
       edges {
         cursor
         node {

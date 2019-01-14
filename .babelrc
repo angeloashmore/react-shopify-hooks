@@ -5,5 +5,10 @@
     }],
     "@babel/preset-react"
   ],
-  "plugins": ["lodash"]
+  "plugins": ["lodash"],
+  "env": {
+    "test": {
+      "presets": [["@babel/preset-env"]]
+    }
+  }
 }

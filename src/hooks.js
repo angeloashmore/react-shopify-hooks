@@ -1,7 +1,10 @@
-import { useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { compose, get, find, merge } from 'lodash/fp'
 
+import { getNodes } from './lib'
 import { QueryProductNode } from './graphql/QueryProductNode'
+
+export { useApolloClient as useShopifyApolloClient }
 
 export const useShopifyProduct = (id, options) => {
   const { data, ...rest } = useQuery(
@@ -11,7 +14,7 @@ export const useShopifyProduct = (id, options) => {
     })
   )
 
-  return { product: data, ...rest }
+  return { product: get('node', data), ...rest }
 }
 
 export const useShopifyProductVariant = (productId, variantId, options) => {
@@ -20,6 +23,7 @@ export const useShopifyProductVariant = (productId, variantId, options) => {
   return {
     productVariant: compose(
       find(['id', variantId]),
+      getNodes,
       get('variants')
     )(product),
     ...rest,
