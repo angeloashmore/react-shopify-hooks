@@ -1,11 +1,11 @@
 import { useQuery } from 'react-apollo-hooks'
 import { compose, get, find, merge } from 'lodash/fp'
 
-import { QueryProductByHandle } from './graphql/QueryProductByHandle'
+import { QueryProductNode } from './graphql/QueryProductNode'
 
 export const useShopifyProduct = (id, options) => {
   const { data, ...rest } = useQuery(
-    QueryProductByHandle,
+    QueryProductNode,
     merge(options, {
       variables: { id },
     })
