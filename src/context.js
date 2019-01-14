@@ -1,16 +1,18 @@
 import React from 'react'
-import Shopify from 'shopify-buy'
-
-export const ShopifyContext = React.createContext()
+import ApolloClient from 'apollo-boost'
+import { ApolloProvider } from 'react-apollo-hooks'
 
 export const ShopifyProvider = ({
   children,
-  domain,
+  shopName,
   storefrontAccessToken,
 }) => {
-  const client = Shopify.buildClient({ domain, storefrontAccessToken })
+  const client = new ApolloClient({
+    uri: `https;//${shopName}.myshopify.com/api/graphql`,
+    headers: {
+      'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+    },
+  })
 
-  return (
-    <ShopifyContext.Provider value={client}>{children}</ShopifyContext.Provider>
-  )
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }

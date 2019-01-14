@@ -26,8 +26,10 @@
   "author": "Angelo Ashmore",
   "license": "MIT",
   "dependencies": {
+    "apollo-boost": "^0.1.23",
+    "graphql": "^14.0.2",
     "lodash": "^4.17.11",
-    "shopify-buy": "^2.0.0"
+    "react-apollo-hooks": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
