@@ -35,35 +35,64 @@ Context provider for all Shopify hooks. Must be used at the root of your app.
 const { product, error } = useShopifyProduct(productId)
 ```
 
-- `product` &mdash; All product data for the provided product ID
-- `error` &mdash; Error message if fetching product data failed
+- `product`<br/>
+  All product data for the provided product ID
+
+- `error`<br/>
+  Error message if fetching product data failed
 
 ---
 
 ### `useShopifyProductVariant`
 
 ```
-const { product, actions, error } = useShopifyProduct(productId, productVariantId)
+const { productVariant, actions, error } = useShopifyProductVariant(productId, productVariantId)
 ```
 
-- `product` &mdash; All product variant data for the provided product variant
-  ID
-- `actions` &mdash; Collection of functions related to the product variant
-  - `addToCheckout(checkoutId?)` &mdash; Add the product variant to a checkout.
-    Defaults to the global checkout.
-- `error` &mdash; Error message if fetching product variant data failed
+Fetches product variant data. Note that the product variant's parent product's
+ID is necessary.
+
+#### Return Values
+
+- `productVariant`<br/>
+  All product variant data for the provided product variant ID
+
+- `actions`<br/>
+  Collection of functions related to the product variant
+
+  - `addToCheckout(quantity = 1, checkoutId?)`<br/>
+    Add the product variant to a checkout. Defaults to the global checkout.
+
+- `error`<br/>
+  Error message if fetching product variant data failed
 
 ---
 
 ### `useShopifyAuth`
 
 ```
-const { signIn, signOut, isSignedIn } = useShopifyAuth()
+const { signIn, signOut, customerAccessToken, isSignedIn } = useShopifyAuth()
 ```
 
-- `signIn(email, password)` &mdash; Retrieve and store a customer access token
-- `signOut()` &mdash; Sign out and reset all global state
-- `isSignedIn` &mdash; `true` if signed in, `false` otherwise
+Manages authentication by fetching and storing customer access tokens. The
+globally stored customer access token is used by other hooks' actions if
+available.
+
+#### Return Values
+
+**Object** with the following properties.
+
+- `signIn(email, password, setGlobal = true)`<br/>
+  Retrieve and store a customer access token
+
+- `signOut()`<br/>
+  Sign out and reset all global state
+
+- `customerAccessToken`<br/>
+  The globally stored customer access token
+
+- `isSignedIn`<br/>
+  `true` if signed in, `false` otherwise
 
 ---
 
