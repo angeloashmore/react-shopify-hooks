@@ -84,8 +84,12 @@ available.
 - `signIn(email, password, setGlobal = true)`<br/>
   Retrieve and store a customer access token
 
-- `signOut()`<br/>
-  Sign out and reset all global state
+- `customerAccessTokenRenew(customerAccessToken?, setGlobal = true)`<br/>
+  Renew the customer access token. If no customer access token is provided, the
+  global token is used.
+
+- `signOut(customerAccessToken?)`<br/>
+  Delete the customer access token and reset all global state
 
 - `customerAccessToken`<br/>
   The globally stored customer access token
@@ -170,3 +174,27 @@ const ApplyDiscountButton = ({ discountCode }) => {
 
 - `error`<br/>
   Error message if fetching checkout data failed
+
+---
+
+### `useShopifyCustomer`
+
+```
+const { customer, actions, error } = useShopifyCustomer()
+```
+
+Fetches product variant data. Note that the parent product's ID is necessary.
+
+#### Return Values
+
+- `productVariant`<br/>
+  All product variant data for the provided product variant ID
+
+- `actions`<br/>
+  Collection of functions related to the product variant
+
+  - `addToCheckout(quantity = 1, checkoutId?)`<br/>
+    Add the product variant to a checkout. Defaults to the global checkout.
+
+- `error`<br/>
+  Error message if fetching product variant data failed
