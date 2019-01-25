@@ -67,35 +67,26 @@ Fetches product variant data. Note that the parent product's ID is necessary.
 
 ---
 
-### `useShopifyAuth`
+### `useShopifyCustomerAccessToken`
 
 ```
-const { signIn, signOut, customerAccessToken, isSignedIn } = useShopifyAuth()
+const { create, renew, delete } = useShopifyCustomerAccessToken()
 ```
 
-Manages authentication by fetching and storing customer access tokens. The
-globally stored customer access token is used by other hooks' actions if
-available.
+Manages customer access token creation, renewal, and deletion.
 
 #### Return Values
 
 **Object** with the following properties.
 
-- `signIn(email, password, setGlobal = true)`<br/>
-  Retrieve and store a customer access token
+- `create(email, password)`<br/>
+  Create a new customer access token. Returns the token.
 
-- `customerAccessTokenRenew(customerAccessToken?, setGlobal = true)`<br/>
-  Renew the customer access token. If no customer access token is provided, the
-  global token is used.
+- `renew(customerAccessToken)`<br/>
+  Renew the customer access token. Returns the renewed token.
 
-- `signOut(customerAccessToken?)`<br/>
-  Delete the customer access token and reset all global state
-
-- `customerAccessToken`<br/>
-  The globally stored customer access token
-
-- `isSignedIn`<br/>
-  `true` if signed in, `false` otherwise
+- `delete(customerAccessToken)`<br/>
+  Permanently delete the customer access token.
 
 ---
 
