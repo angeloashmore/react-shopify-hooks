@@ -105,8 +105,8 @@ Fetches a checkout using the provided checkout ID and provides actions for that
 checkout. If no checkout ID is provided, the global checkout ID is used. If no
 global checkout is availalable, a new checkout is created.
 
-The global checkout will be set to the checkout here unless `setGlobal` is set
-to false.
+The global checkout will be set to the checkout unless `setGlobal` is set to
+false.
 
 #### Example
 
