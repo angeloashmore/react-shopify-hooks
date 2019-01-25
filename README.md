@@ -100,45 +100,45 @@ const ApplyDiscountButton = ({ discountCode }) => {
 
 **Object** with the following properties.
 
-- **`checkout`**<br/>
+- `checkout`<br/>
   All checkout data. Data updates on successful actions.
 
-- **`actions`**<br/>
+- `actions`<br/>
   Collection of functions related to the product variant
 
-  - **`attributesUpdate(lineItems)`**<br/>
+  - `attributesUpdate(lineItems)`<br/>
     Update the checkout attributes
 
-  - **`customerAssociate(customerAccessToken?)`**<br />
+  - `customerAssociate(customerAccessToken?)`<br />
     Associate the checkout to a customer. If no customer access token is
     provided, the global customer access token is used.
 
-  - **`customerDisassociate()`**<br/>
+  - `customerDisassociate()`<br/>
     Disssociate the checkout from any customer
 
-  - **`discountCodeApply(code)`**<br/>
+  - `discountCodeApply(code)`<br/>
     Apply a discount code to the checkout
 
-  - **`discountCodeRemove()`**<br/>
+  - `discountCodeRemove()`<br/>
     Remove any discount code from the checkout
 
-  - **`emailUpdate()`**<br/>
+  - `emailUpdate()`<br/>
     Update the checkout's email address
 
-  - **`giftCardsAppend(codes)`**<br/>
+  - `giftCardsAppend(codes)`<br/>
     Append gift card codes to the checkout
 
-  - **`giftCardsRemove(code)`**<br/>
+  - `giftCardsRemove(code)`<br/>
     Remove the gift card code from the checkout
 
-  - **`lineItemsReplace(lineItems)`**<br/>
+  - `lineItemsReplace(lineItems)`<br/>
     Replace the checkout line items
 
-  - **`shippingAddressUpdate(address)`**<br/>
+  - `shippingAddressUpdate(address)`<br/>
     Update the checkout's shipping address
 
-  - **`shippingLineUpdate(handle)`**<br/>
+  - `shippingLineUpdate(handle)`<br/>
     Update the checkout's shipping line
 
-- **`error`**<br/>
+- `error`<br/>
   Error message if fetching checkout data failed
