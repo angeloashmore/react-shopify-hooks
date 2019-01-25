@@ -49,8 +49,7 @@ const { product, error } = useShopifyProduct(productId)
 const { productVariant, actions, error } = useShopifyProductVariant(productId, productVariantId)
 ```
 
-Fetches product variant data. Note that the product variant's parent product's
-ID is necessary.
+Fetches product variant data. Note that the parent product's ID is necessary.
 
 #### Return Values
 
