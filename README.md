@@ -74,10 +74,31 @@ const { checkout, actions, error } = useShopifyCheckout(checkoutId?, setGlobal =
 ```
 
 Fetches a checkout using the provided checkout ID and provides actions for that
-checkout. If no checkout ID is provided, a new checkout is created.
+checkout. If no checkout ID is provided, the global checkout ID is used. If no
+global checkout is availalable, a new checkout is created.
 
 The global checkout will be set to the checkout here unless `setGlobal` is set
 to false.
+
+#### Example
+
+```js
+const ApplyDiscountButton = ({ discountCode }) => {
+  const {
+    actions: { discountCodeApply },
+  } = useShopifyCheckout()
+
+  return (
+    <button onClick={() => discountCodeApply(discountCode)}>
+      Instant savings!
+    </button>
+  )
+}
+```
+
+#### Return Values
+
+**Object** with the following properties.
 
 - **`checkout`**<br/>
   All checkout data. Data updates on successful actions.
@@ -89,7 +110,8 @@ to false.
     Update the checkout attributes
 
   - **`customerAssociate(customerAccessToken?)`**<br />
-    Associate the checkout to a customer. If no customer access token is provided, the global access token is used.
+    Associate the checkout to a customer. If no customer access token is
+    provided, the global customer access token is used.
 
   - **`customerDisassociate()`**<br/>
     Disssociate the checkout from any customer
