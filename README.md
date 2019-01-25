@@ -79,17 +79,44 @@ checkout. If no checkout ID is provided, a new checkout is created.
 The global checkout will be set to the checkout here unless `setGlobal` is set
 to false.
 
-- `checkout` &mdash; All checkout data. Data updates on successful actions.
-- `actions` &mdash; Collection of functions related to the product variant
-  - `attributesUpdate(lineItems)` &mdash; Update the checkout attributes
-  - `customerAssociate(customerAccessToken?)` &mdash; Associate the checkout to a customer. If no customer access token is provided, the global access token is used.
-  - `customerDisassociate()` &mdash; Disssociate the checkout from any customer
-  - `discountCodeApply(code)` &mdash; Apply a discount code to the checkout
-  - `discountCodeRemove()` &mdash; Remove any discount code from the checkout
-  - `emailUpdate()` &mdash; Update the checkout's email address
-  - `giftCardsAppend(codes)` &mdash; Append gift card codes to the checkout
-  - `giftCardsRemove(code)` &mdash; Remove the gift card code from the checkout
-  - `lineItemsReplace(lineItems)` &mdash; Replace the checkout line items
-  - `shippingAddressUpdate(address)` &mdash; Update the checkout's shipping address
-  - `shippingLineUpdate(handle)` &mdash; Update the checkout's shipping line
-- `error` &mdash; Error message if fetching checkout data failed
+- **`checkout`**<br/>
+  All checkout data. Data updates on successful actions.
+
+- **`actions`**<br/>
+  Collection of functions related to the product variant
+
+  - **`attributesUpdate(lineItems)`**<br/>
+    Update the checkout attributes
+
+  - **`customerAssociate(customerAccessToken?)`**<br />
+    Associate the checkout to a customer. If no customer access token is provided, the global access token is used.
+
+  - **`customerDisassociate()`**<br/>
+    Disssociate the checkout from any customer
+
+  - **`discountCodeApply(code)`**<br/>
+    Apply a discount code to the checkout
+
+  - **`discountCodeRemove()`**<br/>
+    Remove any discount code from the checkout
+
+  - **`emailUpdate()`**<br/>
+    Update the checkout's email address
+
+  - **`giftCardsAppend(codes)`**<br/>
+    Append gift card codes to the checkout
+
+  - **`giftCardsRemove(code)`**<br/>
+    Remove the gift card code from the checkout
+
+  - **`lineItemsReplace(lineItems)`**<br/>
+    Replace the checkout line items
+
+  - **`shippingAddressUpdate(address)`**<br/>
+    Update the checkout's shipping address
+
+  - **`shippingLineUpdate(handle)`**<br/>
+    Update the checkout's shipping line
+
+- **`error`**<br/>
+  Error message if fetching checkout data failed
