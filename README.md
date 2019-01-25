@@ -46,7 +46,7 @@ const { product, error } = useShopifyProduct(productId)
 ### `useShopifyProductVariant`
 
 ```
-const { productVariant, actions, error } = useShopifyProductVariant(productId, productVariantId)
+const { productVariant, error } = useShopifyProductVariant(productId, productVariantId)
 ```
 
 Fetches product variant data. Note that the parent product's ID is necessary.
@@ -55,12 +55,6 @@ Fetches product variant data. Note that the parent product's ID is necessary.
 
 - `productVariant`<br/>
   All product variant data for the provided product variant ID
-
-- `actions`<br/>
-  Collection of functions related to the product variant
-
-  - `addToCheckout(quantity = 1, checkoutId?)`<br/>
-    Add the product variant to a checkout. Defaults to the global checkout.
 
 - `error`<br/>
   Error message if fetching product variant data failed
