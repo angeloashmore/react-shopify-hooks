@@ -102,15 +102,13 @@ available.
 ### `useShopifyCheckout`
 
 ```
-const { checkout, actions, error } = useShopifyCheckout(checkoutId?, setGlobal = true)
+const { checkout, actions, error } = useShopifyCheckout(checkoutId?)
 ```
 
 Fetches a checkout using the provided checkout ID and provides actions for that
-checkout. If no checkout ID is provided, the global checkout ID is used. If no
-global checkout is availalable, a new checkout is created.
+checkout.
 
-The global checkout will be set to the checkout unless `setGlobal` is set to
-false.
+If no checkout ID is provided, all actions except `createCheckout` will fail.
 
 #### Example
 
@@ -118,7 +116,7 @@ false.
 const ApplyDiscountButton = ({ discountCode }) => {
   const {
     actions: { discountCodeApply },
-  } = useShopifyCheckout()
+  } = useShopifyCheckout(myCheckoutId)
 
   return (
     <button onClick={() => discountCodeApply(discountCode)}>
@@ -138,63 +136,98 @@ const ApplyDiscountButton = ({ discountCode }) => {
 - `actions`<br/>
   Collection of functions related to the product variant
 
-  - `attributesUpdate(lineItems)`<br/>
-    Update the checkout attributes
+  - `createCheckout()`<br/>
+    Create a new checkout. Returns the checkout ID.
 
-  - `customerAssociate(customerAccessToken?)`<br />
-    Associate the checkout to a customer. If no customer access token is
-    provided, the global customer access token is used.
+  - `attributesUpdate(attributes)`<br/>
+    Update the checkout attributes.
+
+  - `customerAssociate(customerAccessToken)`<br />
+    Associate the checkout to a customer.
 
   - `customerDisassociate()`<br/>
-    Disssociate the checkout from any customer
+    Disssociate the checkout from any customer.
 
   - `discountCodeApply(code)`<br/>
-    Apply a discount code to the checkout
+    Apply a discount code to the checkout.
 
   - `discountCodeRemove()`<br/>
-    Remove any discount code from the checkout
+    Remove any discount code from the checkout.
 
-  - `emailUpdate()`<br/>
-    Update the checkout's email address
+  - `emailUpdate(email)`<br/>
+    Update the checkout's email address.
 
   - `giftCardsAppend(codes)`<br/>
-    Append gift card codes to the checkout
+    Append gift card codes to the checkout.
 
-  - `giftCardsRemove(code)`<br/>
-    Remove the gift card code from the checkout
+  - `giftCardRemove(code)`<br/>
+    Remove the gift card code from the checkout.
 
   - `lineItemsReplace(lineItems)`<br/>
-    Replace the checkout line items
+    Replace the checkout line items.
 
   - `shippingAddressUpdate(address)`<br/>
-    Update the checkout's shipping address
+    Update the checkout's shipping address.
 
   - `shippingLineUpdate(handle)`<br/>
-    Update the checkout's shipping line
+    Update the checkout's shipping line.
 
 - `error`<br/>
-  Error message if fetching checkout data failed
+  Error message if fetching checkout data failed.
 
 ---
 
 ### `useShopifyCustomer`
 
 ```
-const { customer, actions, error } = useShopifyCustomer()
+const { customer, actions, error } = useShopifyCustomer(customerAccessToken?)
 ```
 
-Fetches product variant data. Note that the parent product's ID is necessary.
+Fetches a customer using the provided customer access token and provides
+actions for that customer.
+
+If no customer access token is provided, all actions except `createCustomer`,
+`activateCustomer`, `recoverCustomer`, `resetCustomer`, and
+`resetCustomerByUrl` will fail.
 
 #### Return Values
 
-- `productVariant`<br/>
-  All product variant data for the provided product variant ID
+- `customer`<br/>
+  All customer data for the provided customer access token.
 
 - `actions`<br/>
-  Collection of functions related to the product variant
+  Collection of functions related to the customer.
 
-  - `addToCheckout(quantity = 1, checkoutId?)`<br/>
-    Add the product variant to a checkout. Defaults to the global checkout.
+  - `createCustomer(email, password)`<br/>
+    Create a new customer.
+
+  - `activateCustomer(customerId, activationToken, password)`<br/>
+    Activate a customer using the provided customer Id, activation token, and
+    password.
+
+  - `recoverCustomer(email)`<br/>
+    Send a reset password email to the customer.
+
+  - `resetCustomer(resetToken, password)`<br/>
+    Reset a customer's password with the provided reset token and password.
+
+  - `resetCustomerByUrl(resetUrl, password)`<br/>
+    Reset a customer's password with the provided reset URL and password.
+
+  - `addressCreate(address)`<br/>
+    Add an address to the customer.
+
+  - `addressDelete(addressId)`<br/>
+    Delete a customer's address using the address ID.
+
+  - `addressUpdate(id, address)`<br/>
+    Update a customer's address using the address ID.
+
+  - `addressDefaultAddressUpdate(addressId)`<br/>
+    Set a default address for the customer.
+
+  - `updateCustomer(attributes)`<br/>
+    Update a customer's attributes.
 
 - `error`<br/>
-  Error message if fetching product variant data failed
+  Error message if fetching customer data failed
