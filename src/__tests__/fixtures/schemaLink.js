@@ -20,13 +20,7 @@ const schema = makeExecutableSchema({
   },
 })
 
-const mocks = {
-  Node: (_, { id }) => ({
-    id,
-    __typename: 'Product',
-  }),
+export const createSchemaLink = ({ mocks }) => {
+  addMockFunctionsToSchema({ schema, mocks })
+  return new SchemaLink({ schema })
 }
-
-addMockFunctionsToSchema({ schema, mocks })
-
-export const schemaLink = new SchemaLink({ schema })

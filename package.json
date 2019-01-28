@@ -6,6 +6,8 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "get-schema": "graphql get-schema -c -p shopify-storefront > ./src/__tests__/fixtures/schema.graphql",
+    "get-fragment-types": "node scripts/fetchFragmentTypes.js",
+    "get-test-data": "npm run get-schema && npm run get-fragment-types",
     "build": "NODE_ENV=production rollup -c",
     "build:watch": "npm run build -- --watch",
     "format": "prettier --write 'src/**/*.js' 'rollup.config.js' 'README.md'",
@@ -45,6 +47,7 @@
     "babel-jest": "^23.6.0",
     "babel-plugin-lodash": "^3.3.4",
     "graphql-cli": "^3.0.7",
+    "graphql-config": "^2.2.1",
     "graphql-tools": "^4.0.4",
     "husky": "^1.3.1",
     "jest": "^23.6.0",
