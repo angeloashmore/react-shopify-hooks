@@ -171,12 +171,11 @@ export const useShopifyCustomerAccessToken = () => {
  * that checkout.
  */
 export const useShopifyCheckout = checkoutId => {
-  // Nodes
-  const { data: checkoutData, error } = useQuery(QueryCheckoutNode, {
+  const { data, ...rest } = useQuery(QueryCheckoutNode, {
     variables: { id: checkoutId },
     skip: !Boolean(checkoutId),
+    suspend: false,
   })
-  const checkoutNode = get('node', checkoutData)
 
   // Mutations
   const mutationCheckoutCreate = useMutation(MutationCheckoutCreate)
@@ -216,10 +215,9 @@ export const useShopifyCheckout = checkoutId => {
 
   return {
     // All checkout data. Data updates on successful actions.
-    checkout: checkoutNode,
+    checkout: get('node', data),
 
-    // Error message if fetching checkout data failed.
-    error,
+    ...rest,
 
     // Collection of functions related to the product variant.
     actions: {
@@ -238,7 +236,11 @@ export const useShopifyCheckout = checkoutId => {
           variables: { checkoutId, input },
         })
 
-        return mutationResultNormalizer('checkoutUpdate', 'checkout', result)
+        return mutationResultNormalizer(
+          'checkoutAttributesUpdateV2',
+          'checkout',
+          result
+        )
       },
 
       // Associate the checkout to a customer.
