@@ -16,8 +16,8 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
  *
  * Creates an Apollo client with the provided mocks added to the schema link.
  */
-export const createClient = ({ mocks }) =>
+export const createClient = (options = {}) =>
   new ApolloClient({
     cache: new InMemoryCache({ fragmentMatcher }),
-    link: createSchemaLink({ mocks }),
+    link: createSchemaLink({ mocks: options.mocks }),
   })

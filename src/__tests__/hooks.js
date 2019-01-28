@@ -76,8 +76,10 @@ describe('useShopifyProductVariant', () => {
 /***
  * useShopifyCustomerAccessToken
  */
-describe.skip('useShopifyCustomerAccessToken', () => {
+describe('useShopifyCustomerAccessToken', () => {
   test('createCustomerAccessToken should return a new token', async () => {
+    const client = createClient()
+
     const Component = () => {
       const [token, setToken] = useState(null)
       const { createCustomerAccessToken } = useShopifyCustomerAccessToken()
@@ -97,9 +99,9 @@ describe.skip('useShopifyCustomerAccessToken', () => {
     }
 
     const { container } = render(
-      <MockProvider>
+      <ShopifyProvider client={client}>
         <Component />
-      </MockProvider>
+      </ShopifyProvider>
     )
     await flushEffectsAndWait()
     expect(container.textContent).toBe('Hello World')
