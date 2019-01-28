@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import ApolloClient from 'apollo-boost'
 import {
   ApolloProvider,
@@ -56,15 +56,16 @@ export const ShopifyProvider = ({
   shopName,
   storefrontAccessToken,
 }) => {
-  const apolloClient = new ApolloClient({
-    uri: `https://${shopName}.myshopify.com/api/graphql`,
-    headers: {
-      'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
-    },
-  })
+  if (!client)
+    client = new ApolloClient({
+      uri: `https://${shopName}.myshopify.com/api/graphql`,
+      headers: {
+        'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+      },
+    })
 
   return (
-    <ShopifyApolloContext.Provider value={client || apolloClient}>
+    <ShopifyApolloContext.Provider value={client}>
       {children}
     </ShopifyApolloContext.Provider>
   )
@@ -84,12 +85,36 @@ export const useShopifyApolloClient = () => useContext(ShopifyApolloContext)
  */
 export const useShopifyProduct = id => {
   const client = useShopifyApolloClient()
-  const { data, ...rest } = client.query({
-    query: QueryProductNode,
-    variables: { id },
-  })
 
-  return { product: get('node', data), ...rest }
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const performQuery = async () => {
+    setLoading(true)
+
+    try {
+      const result = await client.query({
+        query: QueryProductNode,
+        variables: { id },
+      })
+
+      setData(result.data)
+    } catch (queryError) {
+      setError(queryError)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(
+    () => {
+      performQuery()
+    },
+    [id]
+  )
+
+  return { product: get('node', data), loading, error }
 
   // const { data, error } = useQuery(QueryProductNode, {
   //   variables: { id },
