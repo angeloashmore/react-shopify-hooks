@@ -141,7 +141,7 @@ export const useShopifyCustomerAccessToken = () => {
       })
 
       return mutationResultNormalizer(
-        'customerAccessTokenDelete',
+        'customerAccessTokenRenew',
         'customerAccessToken',
         result
       )

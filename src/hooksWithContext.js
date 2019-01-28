@@ -92,12 +92,14 @@ export const useShopifyReducer = () => useContext(ReducerContext)
  */
 export const useShopifyCustomerAccessTokenWithContext = (autoRenew = true) => {
   const [{ customerAccessToken }, dispatch] = useShopifyReducer()
-  const useShopifyCustomerResult = useShopifyCustomer(customerAccessToken)
+  const useShopifyCustomerAccessTokenResult = useShopifyCustomerAccessToken(
+    customerAccessToken
+  )
   const {
     createCustomerAccessToken,
     renewCustomerAccessToken,
     deleteCustomerAccessToken,
-  } = useShopifyCustomerAccessToken()
+  } = useShopifyCustomerAccessTokenResult
 
   // Renews and sets the global customer access token.
   const renewToken = async () => {
@@ -120,7 +122,7 @@ export const useShopifyCustomerAccessTokenWithContext = (autoRenew = true) => {
   // TODO: Add auto-renew logic here.
   // - If wihin 1 day (duration undecided) of expiration, renew token
 
-  return merge(useShopifyCustomerResult, {
+  return merge(useShopifyCustomerAccessTokenResult, {
     customerAccessToken,
     isSignedIn: Boolean(customerAccessToken),
     actions: {
@@ -184,9 +186,12 @@ export const useShopifyCheckoutWithContext = (autoCreate = true) => {
 
   // If autoCreate is true, automatically create a new checkout if one is not
   // present.
-  useEffect(() => {
-    if (autoCreate && !checkoutId) createCheckoutWithContext()
-  }, [checkoutId])
+  useEffect(
+    () => {
+      if (autoCreate && !checkoutId) createCheckoutWithContext()
+    },
+    [checkoutId]
+  )
 
   return merge(useShopifyCheckoutResult, {
     actions: {
