@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import ApolloClient from 'apollo-boost'
 import {
   ApolloProvider,
@@ -43,8 +43,6 @@ import { MutationCustomerReset } from './graphql/MutationCustomerReset'
 import { MutationCustomerResetByUrl } from './graphql/MutationCustomerResetByUrl'
 import { MutationCustomerUpdate } from './graphql/MutationCustomerUpdate'
 
-const ShopifyApolloContext = React.createContext()
-
 /***
  * ShopifyProvider
  *
@@ -64,11 +62,7 @@ export const ShopifyProvider = ({
       },
     })
 
-  return (
-    <ShopifyApolloContext.Provider value={client}>
-      {children}
-    </ShopifyApolloContext.Provider>
-  )
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }
 
 /***
@@ -76,7 +70,7 @@ export const ShopifyProvider = ({
  *
  * Returns direct access to the Apollo client for arbitrary query execution.
  */
-export const useShopifyApolloClient = () => useContext(ShopifyApolloContext)
+export { useApolloClient as useShopifyApolloClient }
 
 /***
  * useShopifyProduct
@@ -84,43 +78,12 @@ export const useShopifyApolloClient = () => useContext(ShopifyApolloContext)
  * Provides product data for a given product ID.
  */
 export const useShopifyProduct = id => {
-  const client = useShopifyApolloClient()
+  const { data, ...rest } = useQuery(QueryProductNode, {
+    variables: { id },
+    suspend: false,
+  })
 
-  const [data, setData] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  const performQuery = async () => {
-    setLoading(true)
-
-    try {
-      const result = await client.query({
-        query: QueryProductNode,
-        variables: { id },
-      })
-
-      setData(result.data)
-    } catch (queryError) {
-      setError(queryError)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(
-    () => {
-      performQuery()
-    },
-    [id]
-  )
-
-  return { product: get('node', data), loading, error }
-
-  // const { data, error } = useQuery(QueryProductNode, {
-  //   variables: { id },
-  // })
-
-  // return { product: get('node', data), error }
+  return { product: get('node', data), ...rest }
 }
 
 /***

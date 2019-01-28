@@ -41,7 +41,7 @@ const defaultMocks = [
   },
 ]
 
-const waitForNextTick = ms => new Promise(resolve => setTimeout(resolve, ms))
+const wait = (ms = 20) => new Promise(resolve => setTimeout(resolve, ms))
 
 const Wrapper = ({ mocks = defaultMocks, children }) => {
   const client = new ApolloClient({
@@ -68,7 +68,28 @@ describe('useShopifyProduct', () => {
     const tree = component.toJSON()
     expect(tree).toBe('loading')
 
-    await waitForNextTick(25)
+    await wait()
+
+    const tree2 = component.toJSON()
+    expect(tree2).toBe('title')
+  })
+
+  test('should fetch product data by ID', async () => {
+    const Component = () => {
+      const { product, loading } = useShopifyProduct('id')
+      return loading ? 'loading' : product.title
+    }
+
+    const component = renderer.create(
+      <Wrapper>
+        <Component />
+      </Wrapper>
+    )
+
+    const tree = component.toJSON()
+    expect(tree).toBe('loading')
+
+    await wait()
 
     const tree2 = component.toJSON()
     expect(tree2).toBe('title')
