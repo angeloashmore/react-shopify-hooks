@@ -49,6 +49,7 @@
     "react": "16.8.0-alpha.0",
     "react-dom": "16.8.0-alpha.0",
     "react-test-renderer": "16.8.0-alpha.0",
+    "react-testing-library": "^5.4.4",
     "rimraf": "^2.6.3",
     "rollup": "^1.1.0",
     "rollup-plugin-babel": "^4.3.0",

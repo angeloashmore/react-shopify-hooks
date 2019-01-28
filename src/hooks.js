@@ -92,11 +92,12 @@ export const useShopifyProduct = id => {
  * Provides product variant data for a given variant ID.
  */
 export const useShopifyProductVariant = id => {
-  const { data, error } = useQuery(QueryProductVariantNode, {
+  const { data, ...rest } = useQuery(QueryProductVariantNode, {
     variables: { id },
+    suspend: false,
   })
 
-  return { productVariant: get('node', data), error }
+  return { productVariant: get('node', data), ...rest }
 }
 
 /***
