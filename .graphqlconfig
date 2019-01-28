@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "shopify-storefront": {
+      "schemaPath": "schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "default": {
+            "url": "https://graphql.myshopify.com/api/graphql",
+            "headers": {
+              "X-Shopify-Storefront-Access-Token": "078bc5caa0ddebfa89cccb4a1baa1f5c"
+            }
+          }
+        }
+      }
+    }
+  }
+}
