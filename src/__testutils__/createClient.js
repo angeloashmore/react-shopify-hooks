@@ -4,8 +4,8 @@ import {
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory'
 
-import { createSchemaLink } from '../fixtures/schemaLink'
-import introspectionQueryResultData from '../fixtures/fragmentTypes.json'
+import { createSchemaLink } from '../__tests__/fixtures/schemaLink'
+import introspectionQueryResultData from '../__tests__/fixtures/fragmentTypes.json'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,

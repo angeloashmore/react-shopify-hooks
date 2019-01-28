@@ -1,5 +1,5 @@
 module.exports = {
-  modulePathIgnorePatterns: ['fixtures', 'utils'],
+  modulePathIgnorePatterns: ['fixtures'],
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
     '.*': 'babel-jest',

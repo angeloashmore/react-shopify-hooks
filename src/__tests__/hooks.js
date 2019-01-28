@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { render, cleanup, flushEffects } from 'react-testing-library'
 
-import { createClient } from './utils/createClient'
-import { flushEffectsAndWait } from './utils/flushEffectsAndWait'
+import { createClient } from '../__testutils__/createClient'
+import { flushEffectsAndWait } from '../__testutils__/flushEffectsAndWait'
 
 import {
   ShopifyProvider,
