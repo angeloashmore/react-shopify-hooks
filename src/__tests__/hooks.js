@@ -8,6 +8,7 @@ import { checkoutActionTest } from '../__testutils__/checkoutActionTest'
 import {
   ShopifyProvider,
   useShopifyCheckout,
+  useShopifyCustomer,
   useShopifyCustomerAccessToken,
   useShopifyProduct,
   useShopifyProductVariant,
@@ -330,5 +331,134 @@ describe('useShopifyCheckout', () => {
         actionArgs: ['handle'],
       })
     )
+  })
+})
+
+describe('useShopifyCustomer', () => {
+  test('should not return a customer if token is not provided', async () => {
+    const client = createClient()
+
+    const Component = () => {
+      const { customer, loading } = useShopifyCustomer()
+      return loading ? 'loading' : customer ? 'has customer' : 'no customer'
+    }
+
+    const { container } = render(
+      <ShopifyProvider client={client}>
+        <Component />
+      </ShopifyProvider>
+    )
+    expect(container.textContent).toBe('no customer')
+  })
+
+  test('should return customer if ID is provided', async () => {
+    const client = createClient({
+      mocks: {
+        Node: (_, { id }) => ({
+          id,
+          __typename: 'Customer',
+        }),
+      },
+    })
+
+    const Component = () => {
+      const { customer, loading } = useShopifyCustomer('id')
+      return loading ? 'loading' : customer.__typename
+    }
+
+    const { container } = render(
+      <ShopifyProvider client={client}>
+        <Component />
+      </ShopifyProvider>
+    )
+    expect(container.textContent).toBe('loading')
+    await flushEffectsAndWait()
+    expect(container.textContent).toBe('Customer')
+  })
+
+  describe('actions', () => {
+    test('createCustomer should return a new customer', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [customerId, setCustomerId] = useState(null)
+        const {
+          customer,
+          loading,
+          actions: { createCustomer },
+        } = useShopifyCustomer(customerId)
+
+        useEffect(() => {
+          createCustomer('email', 'password').then(({ data }) =>
+            setCustomerId(data.id)
+          )
+        }, [])
+
+        if (!customer) return 'no customer'
+
+        return loading ? 'loading' : customer.__typename
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      expect(container.textContent).toBe('no customer')
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('Customer')
+    })
+
+    test('activateCustomer should return a new access token', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [token, setToken] = useState(null)
+        const {
+          actions: { activateCustomer },
+        } = useShopifyCustomer()
+
+        useEffect(() => {
+          activateCustomer('id', 'activateToken', 'password').then(
+            ({ data: { accessToken } }) => setToken(accessToken)
+          )
+        }, [])
+
+        return token
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('Hello World')
+    })
+
+    test('recoverCustomer should return undefined', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [response, setResponse] = useState(null)
+        const {
+          actions: { recoverCustomer },
+        } = useShopifyCustomer()
+
+        useEffect(() => {
+          recoverCustomer('email').then(({ data }) => setResponse(data))
+        }, [])
+
+        return typeof response
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('undefined')
+    })
   })
 })

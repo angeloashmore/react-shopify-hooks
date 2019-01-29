@@ -384,11 +384,11 @@ export const useShopifyCheckout = checkoutId => {
  */
 export const useShopifyCustomer = customerAccessToken => {
   // Nodes
-  const { data: customerData, error } = useQuery(QueryCustomer, {
+  const { data, ...rest } = useQuery(QueryCustomer, {
     variables: { customerAccessToken },
     skip: !Boolean(customerAccessToken),
+    suspend: false,
   })
-  const customerNode = get('customer', customerData)
 
   // Mutations
   const mutationCustomerActivate = useMutation(MutationCustomerActivate)
@@ -412,10 +412,9 @@ export const useShopifyCustomer = customerAccessToken => {
 
   return {
     // All customer data. Data updates on successful actions.
-    customer: customerNode,
+    customer: get('customer', data),
 
-    // Error message if fetching customer data failed.
-    error,
+    ...rest,
 
     // Collection of functions related to the customer.
     actions: {

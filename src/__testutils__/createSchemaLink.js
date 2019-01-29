@@ -2,7 +2,7 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools'
 import { SchemaLink } from 'apollo-link-schema'
 import { GraphQLString, GraphQLFloat } from 'graphql'
 
-import typeDefs from './schema.graphql'
+import typeDefs from '../__tests__/fixtures/schema.graphql'
 
 const resolvers = {
   DateTime: GraphQLString,
