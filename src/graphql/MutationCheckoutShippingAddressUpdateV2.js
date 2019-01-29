@@ -10,10 +10,10 @@ export const MutationCheckoutShippingAddressUpdateV2 = gql`
       shippingAddress: $shippingAddress
     ) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

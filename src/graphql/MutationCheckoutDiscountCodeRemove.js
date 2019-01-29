@@ -8,13 +8,13 @@ export const MutationCheckoutDiscountCodeRemove = gql`
   mutation checkoutDiscountCodeRemove($checkoutId: ID!) {
     checkoutDiscountCodeRemove(checkoutId: $checkoutId) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkoutUserErrors {
-        ...CheckoutUserErrorFragment
+        ...FragmentCheckoutUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

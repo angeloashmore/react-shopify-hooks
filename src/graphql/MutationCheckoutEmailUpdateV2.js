@@ -8,13 +8,13 @@ export const MutationCheckoutEmailUpdateV2 = gql`
   mutation checkoutEmailUpdateV2($checkoutId: ID!, $email: String!) {
     checkoutEmailUpdateV2(checkoutId: $checkoutId, email: $email) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkoutUserErrors {
-        ...CheckoutUserErrorFragment
+        ...FragmentCheckoutUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

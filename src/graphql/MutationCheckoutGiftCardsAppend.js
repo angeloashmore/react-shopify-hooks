@@ -13,10 +13,10 @@ export const MutationCheckoutGiftCardsAppend = gql`
       giftCardCodes: $giftCardCodes
     ) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

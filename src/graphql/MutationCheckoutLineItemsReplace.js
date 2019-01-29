@@ -7,10 +7,10 @@ export const MutationCheckoutLineItemsReplace = gql`
   mutation($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!) {
     checkoutLineItemsReplace(checkoutId: $checkoutId, lineItems: $lineItems) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

@@ -10,10 +10,10 @@ export const MutationCheckoutShippingLineUpdate = gql`
       shippingRateHandle: $shippingRateHandle
     ) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

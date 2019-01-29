@@ -10,10 +10,10 @@ export const MutationCheckoutLineItemsRemove = gql`
       lineItemIds: $lineItemIds
     ) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }

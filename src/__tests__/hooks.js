@@ -3,6 +3,7 @@ import { render, cleanup, flushEffects, fireEvent } from 'react-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
 import { flushEffectsAndWait } from '../__testutils__/flushEffectsAndWait'
+import { checkoutActionTest } from '../__testutils__/checkoutActionTest'
 
 import {
   ShopifyProvider,
@@ -232,76 +233,102 @@ describe('useShopifyCheckout', () => {
       expect(container.textContent).toBe('Checkout')
     })
 
-    test('attributesUpdate should return the updated checkout', async () => {
-      const client = createClient({
-        mocks: {
-          Node: (_, { id }) => ({
-            id,
-            __typename: 'Checkout',
-          }),
-        },
+    test(
+      'attributesUpdate should return the updated checkout',
+      checkoutActionTest({
+        action: 'attributesUpdate',
+        hookArgs: ['id'],
+        actionArgs: [{ note: 'note' }],
       })
+    )
 
-      const Component = () => {
-        const [data, setData] = useState(null)
-        const {
-          checkout,
-          loading,
-          actions: { attributesUpdate },
-        } = useShopifyCheckout('id')
-
-        useEffect(() => {
-          attributesUpdate({ note: 'note' }).then(({ data }) => setData(data))
-        }, [])
-
-        return loading ? 'loading' : data ? data.__typename : null
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-
-      expect(container.textContent).toBe('loading')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Checkout')
-    })
-
-    test('customerAssociate should return the updated checkout', async () => {
-      const client = createClient({
-        mocks: {
-          Node: (_, { id }) => ({
-            id,
-            __typename: 'Checkout',
-          }),
-        },
+    test(
+      'customerAssociate should return the updated checkout',
+      checkoutActionTest({
+        action: 'customerAssociate',
+        hookArgs: ['id'],
+        actionArgs: ['token'],
       })
+    )
 
-      const Component = () => {
-        const [data, setData] = useState(null)
-        const {
-          checkout,
-          loading,
-          actions: { customerAssociate },
-        } = useShopifyCheckout('id')
+    test(
+      'customerDisassociate should return the updated checkout',
+      checkoutActionTest({
+        action: 'customerDisassociate',
+        hookArgs: ['id'],
+        actionArgs: ['token'],
+      })
+    )
 
-        useEffect(() => {
-          customerAssociate('token').then(({ data }) => setData(data))
-        }, [])
+    test(
+      'discountCodeApply should return the updated checkout',
+      checkoutActionTest({
+        action: 'discountCodeApply',
+        hookArgs: ['id'],
+        actionArgs: ['code'],
+      })
+    )
 
-        return loading ? 'loading' : data ? data.__typename : null
-      }
+    test(
+      'discountCodeRemove should return the updated checkout',
+      checkoutActionTest({
+        action: 'discountCodeRemove',
+        hookArgs: ['id'],
+      })
+    )
 
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
+    test(
+      'emailUpdate should return the updated checkout',
+      checkoutActionTest({
+        action: 'emailUpdate',
+        hookArgs: ['id'],
+        actionArgs: ['email'],
+      })
+    )
 
-      expect(container.textContent).toBe('loading')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Checkout')
-    })
+    test(
+      'giftCardsAppend should return the updated checkout',
+      checkoutActionTest({
+        action: 'giftCardsAppend',
+        hookArgs: ['id'],
+        actionArgs: [['code1', 'code2']],
+      })
+    )
+
+    test(
+      'giftCardRemove should return the updated checkout',
+      checkoutActionTest({
+        action: 'giftCardRemove',
+        hookArgs: ['id'],
+        actionArgs: ['code'],
+      })
+    )
+
+    test(
+      'lineItemsReplace should return the updated checkout',
+      checkoutActionTest({
+        action: 'lineItemsReplace',
+        hookArgs: ['id'],
+        actionArgs: [[{ quantity: 1, variantId: 'id' }]],
+      })
+    )
+
+    test(
+      'shippingAddressUpdate should return the updated checkout',
+      checkoutActionTest({
+        action: 'shippingAddressUpdate',
+        hookArgs: ['id'],
+        actionArgs: [{}],
+      })
+    )
+
+    test(
+      'shippingLineUpdate should return the updated checkout',
+      checkoutActionTest({
+        action: 'shippingLineUpdate',
+        hookArgs: ['id'],
+        actionArgs: ['handle'],
+      })
+    )
   })
 })

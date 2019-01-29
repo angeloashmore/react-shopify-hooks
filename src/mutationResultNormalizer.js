@@ -9,9 +9,9 @@ export const mutationResultNormalizer = curry(
     // Different mutations use different error names, so normalize to a single
     // name.
     const errors =
-      root.checkoutUserErrors ||
-      root.customerUserErrors ||
-      root.userErrors ||
+      get('checkoutUserErrors', root) ||
+      get('customerUserErrors', root) ||
+      get('userErrors', root) ||
       []
 
     // If the resource path is present, return that data. If not, return true

@@ -13,10 +13,10 @@ export const MutationCheckoutGiftCardRemoveV2 = gql`
       appliedGiftCardId: $appliedGiftCardId
     ) {
       userErrors {
-        ...UserErrorFragment
+        ...FragmentUserError
       }
       checkout {
-        ...CheckoutFragment
+        ...FragmentCheckout
       }
     }
   }
