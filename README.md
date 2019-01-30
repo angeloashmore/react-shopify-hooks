@@ -109,21 +109,30 @@ Fetches product variant data by product variant ID.
 
 #### Actions
 
-- `createCustomerAccessToken(email: String, password: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
+##### createCustomerAccessToken
 
-  Creates a new customer access token.
+```
+(email: String, password: String) => ({ data: CustomerAccessToken, errors: ?Error[] })
+```
 
-- `renewCustomerAccessToken(customerAccessToken: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
+Creates a new customer access token.
 
-  Renews a customer access token.
+##### renewCustomerAccessToken
 
-- `deleteCustomerAccessToken(customerAccessToken: String) => ({ data: String, errors: ?Error[] })`
+`(customerAccessToken: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
 
-  Deletes a customer access token. `data` is the deleted token.
+Renews a customer access token.
+
+##### deleteCustomerAccessToken
+
+`(customerAccessToken: String) => ({ data: String, errors: ?Error[] })`
+
+Deletes a customer access token. `data` is the deleted token.
 
 #### Example
 
 ```js
+import { Formik, Form, Field } from 'formik'
 import { useShopifyCustomerAccessToken } from 'react-shopify-hooks'
 
 // Create a new access token and save it to state.
@@ -138,7 +147,7 @@ const SignInForm = () => {
   }
 
   return (
-    <Formik defaultValues={{ email:'', password: '' }} onSubmit={onSubmit}>
+    <Formik defaultValues={{ email: '', password: '' }} onSubmit={onSubmit}>
       <Form>
         <label>
           <span>Email</span>
