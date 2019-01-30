@@ -52,6 +52,8 @@ const ProductCard = ({ productId }) => {
 }
 ```
 
+---
+
 ### useShopifyProductVariant
 
 ```
@@ -87,6 +89,68 @@ const ProductVariantCard = ({ variantId }) => {
       <h3 className="variant-card__title">{product.title}</h3>
       <p className="variant-card__price">{product.price}</p>
     </div>
+  )
+}
+```
+
+---
+
+### useShopifyCustomerAccessToken
+
+```
+() => ({ createCustomerAccessToken: Function, renewCustomerAccessToken: Function, deleteCustomerAccessToken: Function })
+```
+
+Fetches product variant data by product variant ID.
+
+#### Return Fields
+
+- `actions` - Object of actions. See **Actions** below for details.
+
+#### Actions
+
+- `createCustomerAccessToken(email: String, password: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
+
+  Creates a new customer access token.
+
+- `renewCustomerAccessToken(customerAccessToken: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
+
+  Renews a customer access token.
+
+- `deleteCustomerAccessToken(customerAccessToken: String) => ({ data: String, errors: ?Error[] })`
+
+  Deletes a customer access token. `data` is the deleted token.
+
+#### Example
+
+```js
+import { useShopifyCustomerAccessToken } from 'react-shopify-hooks'
+
+// Create a new access token and save it to state.
+const SignInForm = () => {
+  const [token, setToken] = useState(null)
+  const { createCustomerAccessToken } = useShopifyCustomerAccessToken()
+
+  cosnt onSubmit = ({ email, password }, { setSubmitting }) => {
+    const { data } = createCustomerAccessToken(email, password)
+    if (data && data.accessToken) setToken(data.accessToken)
+    setSubmitting(false)
+  }
+
+  return (
+    <Formik defaultValues={{ email:'', password: '' }} onSubmit={onSubmit}>
+      <Form>
+        <label>
+          <span>Email</span>
+          <Field name="email" />
+        </label>
+        <label>
+          <span>Password</span>
+          <Field name="password" type="password" />
+        </label>
+        <button type="submit">Sign In</button>
+      </Form>
+    </Formik>
   )
 }
 ```
