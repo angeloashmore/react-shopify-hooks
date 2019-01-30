@@ -119,13 +119,17 @@ Creates a new customer access token.
 
 ##### renewCustomerAccessToken
 
-`(customerAccessToken: String) => ({ data: CustomerAccessToken, errors: ?Error[] })`
+```
+(customerAccessToken: String) => ({ data: CustomerAccessToken, errors: ?Error[] })
+```
 
 Renews a customer access token.
 
 ##### deleteCustomerAccessToken
 
-`(customerAccessToken: String) => ({ data: String, errors: ?Error[] })`
+```
+(customerAccessToken: String) => ({ data: String, errors: ?Error[] })
+```
 
 Deletes a customer access token. `data` is the deleted token.
 
