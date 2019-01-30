@@ -3,7 +3,8 @@ import { render, cleanup, flushEffects, fireEvent } from 'react-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
 import { flushEffectsAndWait } from '../__testutils__/flushEffectsAndWait'
-import { checkoutActionTest } from '../__testutils__/checkoutActionTest'
+import { testCheckoutAction } from '../__testutils__/testCheckoutAction'
+import { testCustomerActionToken } from '../__testutils__/testCustomerActionToken'
 
 import {
   ShopifyProvider,
@@ -236,7 +237,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'attributesUpdate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'attributesUpdate',
         hookArgs: ['id'],
         actionArgs: [{ note: 'note' }],
@@ -245,7 +246,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'customerAssociate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'customerAssociate',
         hookArgs: ['id'],
         actionArgs: ['token'],
@@ -254,7 +255,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'customerDisassociate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'customerDisassociate',
         hookArgs: ['id'],
         actionArgs: ['token'],
@@ -263,7 +264,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'discountCodeApply should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'discountCodeApply',
         hookArgs: ['id'],
         actionArgs: ['code'],
@@ -272,7 +273,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'discountCodeRemove should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'discountCodeRemove',
         hookArgs: ['id'],
       })
@@ -280,7 +281,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'emailUpdate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'emailUpdate',
         hookArgs: ['id'],
         actionArgs: ['email'],
@@ -289,7 +290,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'giftCardsAppend should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'giftCardsAppend',
         hookArgs: ['id'],
         actionArgs: [['code1', 'code2']],
@@ -298,7 +299,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'giftCardRemove should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'giftCardRemove',
         hookArgs: ['id'],
         actionArgs: ['code'],
@@ -307,7 +308,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'lineItemsReplace should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'lineItemsReplace',
         hookArgs: ['id'],
         actionArgs: [[{ quantity: 1, variantId: 'id' }]],
@@ -316,7 +317,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'shippingAddressUpdate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'shippingAddressUpdate',
         hookArgs: ['id'],
         actionArgs: [{}],
@@ -325,7 +326,7 @@ describe('useShopifyCheckout', () => {
 
     test(
       'shippingLineUpdate should return the updated checkout',
-      checkoutActionTest({
+      testCheckoutAction({
         action: 'shippingLineUpdate',
         hookArgs: ['id'],
         actionArgs: ['handle'],
@@ -409,32 +410,14 @@ describe('useShopifyCustomer', () => {
       expect(container.textContent).toBe('Customer')
     })
 
-    test('activateCustomer should return a new access token', async () => {
-      const client = createClient()
-
-      const Component = () => {
-        const [token, setToken] = useState(null)
-        const {
-          actions: { activateCustomer },
-        } = useShopifyCustomer()
-
-        useEffect(() => {
-          activateCustomer('id', 'activateToken', 'password').then(
-            ({ data: { accessToken } }) => setToken(accessToken)
-          )
-        }, [])
-
-        return token
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Hello World')
-    })
+    test(
+      'activateCustomer should return a new access token',
+      testCustomerActionToken({
+        action: 'activateCustomer',
+        hookArgs: [],
+        actionArgs: ['id', 'activate token', 'password'],
+      })
+    )
 
     test('recoverCustomer should return undefined', async () => {
       const client = createClient()
@@ -459,6 +442,157 @@ describe('useShopifyCustomer', () => {
       )
       await flushEffectsAndWait()
       expect(container.textContent).toBe('undefined')
+    })
+
+    test(
+      'resetCustomer should return a new access token',
+      testCustomerActionToken({
+        action: 'resetCustomer',
+        hookArgs: [],
+        actionArgs: ['id', 'reset token', 'password'],
+      })
+    )
+
+    test(
+      'resetCustomerByUrl should return a new access token',
+      testCustomerActionToken({
+        action: 'resetCustomerByUrl',
+        hookArgs: [],
+        actionArgs: ['reset url', 'password'],
+      })
+    )
+
+    test('addressCreate should return the new address', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [address, setAddress] = useState(null)
+        const {
+          loading,
+          actions: { addressCreate },
+        } = useShopifyCustomer('id')
+
+        useEffect(() => {
+          addressCreate({}).then(({ data }) => setAddress(data))
+        }, [])
+
+        return address ? address.__typename : 'no address'
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      expect(container.textContent).toBe('no address')
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('MailingAddress')
+    })
+
+    test('addressDelete should return undefined', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [response, setResponse] = useState(null)
+        const {
+          actions: { addressDelete },
+        } = useShopifyCustomer('token')
+
+        useEffect(() => {
+          addressDelete('id').then(({ data }) => setResponse(data))
+        }, [])
+
+        return typeof response
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('undefined')
+    })
+
+    test('addressUpdate should return the updated address', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [address, setAddress] = useState(null)
+        const {
+          loading,
+          actions: { addressUpdate },
+        } = useShopifyCustomer('token')
+
+        useEffect(() => {
+          addressUpdate('id', {}).then(({ data }) => setAddress(data))
+        }, [])
+
+        return address ? address.__typename : 'no address'
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      expect(container.textContent).toBe('no address')
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('MailingAddress')
+    })
+
+    test('addressDefaultAddressUpdate should return the updated customer', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [customer, setCustomer] = useState(null)
+        const {
+          actions: { addressDefaultAddressUpdate },
+        } = useShopifyCustomer('token')
+
+        useEffect(() => {
+          addressDefaultAddressUpdate('id').then(({ data }) =>
+            setCustomer(data)
+          )
+        }, [])
+
+        return customer ? customer.__typename : 'no customer'
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      expect(container.textContent).toBe('no customer')
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('Customer')
+    })
+
+    test('updateCustomer should return the updated customer', async () => {
+      const client = createClient()
+
+      const Component = () => {
+        const [customer, setCustomer] = useState(null)
+        const {
+          actions: { updateCustomer },
+        } = useShopifyCustomer('token')
+
+        useEffect(() => {
+          updateCustomer({}).then(({ data }) => setCustomer(data))
+        }, [])
+
+        return customer ? customer.__typename : 'no customer'
+      }
+
+      const { container } = render(
+        <ShopifyProvider client={client}>
+          <Component />
+        </ShopifyProvider>
+      )
+      expect(container.textContent).toBe('no customer')
+      await flushEffectsAndWait()
+      expect(container.textContent).toBe('Customer')
     })
   })
 })

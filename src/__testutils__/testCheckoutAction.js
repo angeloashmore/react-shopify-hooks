@@ -15,7 +15,7 @@ const client = createClient({
   },
 })
 
-export const checkoutActionTest = ({
+export const testCheckoutAction = ({
   action,
   hookArgs = [],
   actionArgs = [],
