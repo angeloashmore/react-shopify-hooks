@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderHook, cleanup, act } from 'react-hooks-testing-library'
+import { renderHook, cleanup } from 'react-hooks-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
 
