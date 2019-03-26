@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react'
-// import { render, cleanup, flushEffects, fireEvent } from 'react-testing-library'
 import { renderHook, cleanup, act } from 'react-hooks-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
-import { flushEffectsAndWait } from '../__testutils__/flushEffectsAndWait'
-import { testCheckoutAction } from '../__testutils__/testCheckoutAction'
-import { testCustomerActionToken } from '../__testutils__/testCustomerActionToken'
 
 import {
   ShopifyProvider,
@@ -118,9 +114,7 @@ describe('useShopifyCustomerAccessToken', () => {
 
 describe('useShopifyCheckout', () => {
   test('should not return a checkout if ID is not provided', async () => {
-    const { result, waitForNextUpdate } = renderHookWithClient(() =>
-      useShopifyCheckout()
-    )
+    const { result } = renderHookWithClient(() => useShopifyCheckout())
 
     expect(result.current.loading).toBe(false)
     expect(result.current.checkout).toBeUndefined()
@@ -293,264 +287,122 @@ describe('useShopifyCheckout', () => {
   })
 })
 
-describe.skip('useShopifyCustomer', () => {
+describe('useShopifyCustomer', () => {
   test('should not return a customer if token is not provided', async () => {
-    const client = createClient()
+    const { result } = renderHookWithClient(() => useShopifyCustomer())
 
-    const Component = () => {
-      const { customer, loading } = useShopifyCustomer()
-      return loading ? 'loading' : customer ? 'has customer' : 'no customer'
-    }
-
-    const { container } = render(
-      <ShopifyProvider client={client}>
-        <Component />
-      </ShopifyProvider>
-    )
-    expect(container.textContent).toBe('no customer')
+    expect(result.current.loading).toBe(false)
+    expect(result.current.customer).toBeUndefined()
   })
 
   test('should return customer if ID is provided', async () => {
-    const client = createClient({
-      mocks: {
-        Node: (_, { id }) => ({
-          id,
-          __typename: 'Customer',
-        }),
-      },
-    })
-
-    const Component = () => {
-      const { customer, loading } = useShopifyCustomer('id')
-      return loading ? 'loading' : customer.__typename
-    }
-
-    const { container } = render(
-      <ShopifyProvider client={client}>
-        <Component />
-      </ShopifyProvider>
+    const { result, waitForNextUpdate } = renderHookWithClient(() =>
+      useShopifyCustomer('id')
     )
-    expect(container.textContent).toBe('loading')
-    await flushEffectsAndWait()
-    expect(container.textContent).toBe('Customer')
+
+    expect(result.current.loading).toBe(true)
+
+    await waitForNextUpdate()
+
+    expect(result.current.loading).toBe(false)
+    expect(result.current.customer.__typename).toBe('Customer')
   })
 
-  describe.skip('actions', () => {
+  describe('actions', () => {
     test('createCustomer should return a new customer', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer())
 
-      const Component = () => {
-        const [customerId, setCustomerId] = useState(null)
-        const {
-          customer,
-          loading,
-          actions: { createCustomer },
-        } = useShopifyCustomer(customerId)
-
-        useEffect(() => {
-          createCustomer('email', 'password').then(({ data }) =>
-            setCustomerId(data.id)
-          )
-        }, [])
-
-        if (!customer) return 'no customer'
-
-        return loading ? 'loading' : customer.__typename
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
+      const { data } = await result.current.actions.createCustomer(
+        'email',
+        'password'
       )
-      expect(container.textContent).toBe('no customer')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Customer')
+
+      expect(data.__typename).toBe('Customer')
     })
 
-    test(
-      'activateCustomer should return a new access token',
-      testCustomerActionToken({
-        action: 'activateCustomer',
-        hookArgs: [],
-        actionArgs: ['id', 'activate token', 'password'],
-      })
-    )
+    test('activateCustomer should return a new access token', async () => {
+      const { result } = renderHookWithClient(() => useShopifyCustomer())
+
+      const { data } = await result.current.actions.activateCustomer(
+        'id',
+        'activate token',
+        'password'
+      )
+
+      expect(data.__typename).toBe('CustomerAccessToken')
+    })
 
     test('recoverCustomer should return undefined', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer())
 
-      const Component = () => {
-        const [response, setResponse] = useState(null)
-        const {
-          actions: { recoverCustomer },
-        } = useShopifyCustomer()
+      const { data } = await result.current.actions.recoverCustomer('email')
 
-        useEffect(() => {
-          recoverCustomer('email').then(({ data }) => setResponse(data))
-        }, [])
-
-        return typeof response
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('undefined')
+      expect(data).toBeUndefined()
     })
 
-    test(
-      'resetCustomer should return a new access token',
-      testCustomerActionToken({
-        action: 'resetCustomer',
-        hookArgs: [],
-        actionArgs: ['id', 'reset token', 'password'],
-      })
-    )
+    test('resetCustomer should return a new access token', async () => {
+      const { result } = renderHookWithClient(() => useShopifyCustomer())
 
-    test(
-      'resetCustomerByUrl should return a new access token',
-      testCustomerActionToken({
-        action: 'resetCustomerByUrl',
-        hookArgs: [],
-        actionArgs: ['reset url', 'password'],
-      })
-    )
+      const { data } = await result.current.actions.resetCustomer(
+        'id',
+        'reset token',
+        'password'
+      )
+
+      expect(data.__typename).toBe('CustomerAccessToken')
+    })
+
+    test('resetCustomerByUrl should return a new access token', async () => {
+      const { result } = renderHookWithClient(() => useShopifyCustomer())
+
+      const { data } = await result.current.actions.resetCustomerByUrl(
+        'reset url',
+        'password'
+      )
+
+      expect(data.__typename).toBe('CustomerAccessToken')
+    })
 
     test('addressCreate should return the new address', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
 
-      const Component = () => {
-        const [address, setAddress] = useState(null)
-        const {
-          loading,
-          actions: { addressCreate },
-        } = useShopifyCustomer('id')
+      const { data } = await result.current.actions.addressCreate({})
 
-        useEffect(() => {
-          addressCreate({}).then(({ data }) => setAddress(data))
-        }, [])
-
-        return address ? address.__typename : 'no address'
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      expect(container.textContent).toBe('no address')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('MailingAddress')
+      expect(data.__typename).toBe('MailingAddress')
     })
 
     test('addressDelete should return undefined', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
 
-      const Component = () => {
-        const [response, setResponse] = useState(null)
-        const {
-          actions: { addressDelete },
-        } = useShopifyCustomer('token')
+      const { data } = await result.current.actions.addressDelete('id')
 
-        useEffect(() => {
-          addressDelete('id').then(({ data }) => setResponse(data))
-        }, [])
-
-        return typeof response
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('undefined')
+      expect(data).toBeUndefined()
     })
 
     test('addressUpdate should return the updated address', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
 
-      const Component = () => {
-        const [address, setAddress] = useState(null)
-        const {
-          loading,
-          actions: { addressUpdate },
-        } = useShopifyCustomer('token')
+      const { data } = await result.current.actions.addressUpdate('id', {})
 
-        useEffect(() => {
-          addressUpdate('id', {}).then(({ data }) => setAddress(data))
-        }, [])
-
-        return address ? address.__typename : 'no address'
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      expect(container.textContent).toBe('no address')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('MailingAddress')
+      expect(data.__typename).toBe('MailingAddress')
     })
 
     test('addressDefaultAddressUpdate should return the updated customer', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
 
-      const Component = () => {
-        const [customer, setCustomer] = useState(null)
-        const {
-          actions: { addressDefaultAddressUpdate },
-        } = useShopifyCustomer('token')
-
-        useEffect(() => {
-          addressDefaultAddressUpdate('id').then(({ data }) =>
-            setCustomer(data)
-          )
-        }, [])
-
-        return customer ? customer.__typename : 'no customer'
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
+      const { data } = await result.current.actions.addressDefaultAddressUpdate(
+        'id'
       )
-      expect(container.textContent).toBe('no customer')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Customer')
+
+      expect(data.__typename).toBe('Customer')
     })
 
     test('updateCustomer should return the updated customer', async () => {
-      const client = createClient()
+      const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
 
-      const Component = () => {
-        const [customer, setCustomer] = useState(null)
-        const {
-          actions: { updateCustomer },
-        } = useShopifyCustomer('token')
+      const { data } = await result.current.actions.updateCustomer({})
 
-        useEffect(() => {
-          updateCustomer({}).then(({ data }) => setCustomer(data))
-        }, [])
-
-        return customer ? customer.__typename : 'no customer'
-      }
-
-      const { container } = render(
-        <ShopifyProvider client={client}>
-          <Component />
-        </ShopifyProvider>
-      )
-      expect(container.textContent).toBe('no customer')
-      await flushEffectsAndWait()
-      expect(container.textContent).toBe('Customer')
+      expect(data.__typename).toBe('Customer')
     })
   })
 })
