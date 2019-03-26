@@ -70,7 +70,7 @@ export const ShopifyProvider = ({
  *
  * Returns direct access to the Apollo client for arbitrary query execution.
  */
-export { useApolloClient as useShopifyApolloClient }
+export const useShopifyApolloClient = useApolloClient
 
 /***
  * useShopifyProduct
