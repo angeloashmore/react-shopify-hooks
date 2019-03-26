@@ -44,9 +44,7 @@ describe('useShopifyProduct', () => {
     )
 
     expect(result.current.loading).toBe(true)
-
     await waitForNextUpdate()
-
     expect(result.current.loading).toBe(false)
     expect(result.current.product.__typename).toBe('Product')
   })
@@ -63,9 +61,7 @@ describe('useShopifyProductVariant', () => {
     )
 
     expect(result.current.loading).toBe(true)
-
     await waitForNextUpdate()
-
     expect(result.current.loading).toBe(false)
     expect(result.current.product.__typename).toBe('ProductVariant')
   })
@@ -79,7 +75,6 @@ describe('useShopifyCustomerAccessToken', () => {
     const { result } = renderHookWithClient(() =>
       useShopifyCustomerAccessToken()
     )
-
     const {
       data: { accessToken },
     } = await result.current.createCustomerAccessToken('email', 'password')
@@ -91,7 +86,6 @@ describe('useShopifyCustomerAccessToken', () => {
     const { result } = renderHookWithClient(() =>
       useShopifyCustomerAccessToken()
     )
-
     const {
       data: { accessToken },
     } = await result.current.renewCustomerAccessToken('existingToken')
@@ -103,7 +97,6 @@ describe('useShopifyCustomerAccessToken', () => {
     const { result } = renderHookWithClient(() =>
       useShopifyCustomerAccessToken()
     )
-
     const {
       data: accessToken,
     } = await result.current.deleteCustomerAccessToken('Hello World')
@@ -121,25 +114,15 @@ describe('useShopifyCheckout', () => {
   })
 
   test('should return checkout if ID is provided', async () => {
-    const client = createClient({
-      mocks: {
-        Node: (_, { id }) => ({
-          id,
-          __typename: 'Checkout',
-        }),
-      },
-    })
-
     const { result, waitForNextUpdate } = renderHookWithClient(
       () => useShopifyCheckout('id'),
-      client
+      clientWithNodeMock('Checkout')
     )
 
     expect(result.current.loading).toBe(true)
-
     await waitForNextUpdate()
-
     expect(result.current.loading).toBe(false)
+
     expect(result.current.checkout.__typename).toBe('Checkout')
   })
 
@@ -149,7 +132,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout(),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.createCheckout()
 
       expect(data.__typename).toBe('Checkout')
@@ -160,7 +142,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.attributesUpdate({
         note: 'note',
       })
@@ -173,7 +154,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.customerAssociate('token')
 
       expect(data.__typename).toBe('Checkout')
@@ -184,7 +164,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.customerDisassociate(
         'token'
       )
@@ -197,7 +176,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.discountCodeApply('code')
 
       expect(data.__typename).toBe('Checkout')
@@ -208,7 +186,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.discountCodeRemove()
 
       expect(data.__typename).toBe('Checkout')
@@ -219,7 +196,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.emailUpdate('email')
 
       expect(data.__typename).toBe('Checkout')
@@ -230,7 +206,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.giftCardsAppend([
         'code1',
         'code2',
@@ -244,7 +219,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.giftCardRemove('code')
 
       expect(data.__typename).toBe('Checkout')
@@ -255,7 +229,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.lineItemsReplace([
         { quantity: 1, variantId: 'id' },
       ])
@@ -268,7 +241,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.shippingAddressUpdate({})
 
       expect(data.__typename).toBe('Checkout')
@@ -279,7 +251,6 @@ describe('useShopifyCheckout', () => {
         () => useShopifyCheckout('id'),
         clientWithNodeMock('Checkout')
       )
-
       const { data } = await result.current.actions.shippingLineUpdate('handle')
 
       expect(data.__typename).toBe('Checkout')
@@ -301,17 +272,15 @@ describe('useShopifyCustomer', () => {
     )
 
     expect(result.current.loading).toBe(true)
-
     await waitForNextUpdate()
-
     expect(result.current.loading).toBe(false)
+
     expect(result.current.customer.__typename).toBe('Customer')
   })
 
   describe('actions', () => {
     test('createCustomer should return a new customer', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer())
-
       const { data } = await result.current.actions.createCustomer(
         'email',
         'password'
@@ -322,7 +291,6 @@ describe('useShopifyCustomer', () => {
 
     test('activateCustomer should return a new access token', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer())
-
       const { data } = await result.current.actions.activateCustomer(
         'id',
         'activate token',
@@ -334,7 +302,6 @@ describe('useShopifyCustomer', () => {
 
     test('recoverCustomer should return undefined', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer())
-
       const { data } = await result.current.actions.recoverCustomer('email')
 
       expect(data).toBeUndefined()
@@ -342,7 +309,6 @@ describe('useShopifyCustomer', () => {
 
     test('resetCustomer should return a new access token', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer())
-
       const { data } = await result.current.actions.resetCustomer(
         'id',
         'reset token',
@@ -354,7 +320,6 @@ describe('useShopifyCustomer', () => {
 
     test('resetCustomerByUrl should return a new access token', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer())
-
       const { data } = await result.current.actions.resetCustomerByUrl(
         'reset url',
         'password'
@@ -365,7 +330,6 @@ describe('useShopifyCustomer', () => {
 
     test('addressCreate should return the new address', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
-
       const { data } = await result.current.actions.addressCreate({})
 
       expect(data.__typename).toBe('MailingAddress')
@@ -373,7 +337,6 @@ describe('useShopifyCustomer', () => {
 
     test('addressDelete should return undefined', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
-
       const { data } = await result.current.actions.addressDelete('id')
 
       expect(data).toBeUndefined()
@@ -381,7 +344,6 @@ describe('useShopifyCustomer', () => {
 
     test('addressUpdate should return the updated address', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
-
       const { data } = await result.current.actions.addressUpdate('id', {})
 
       expect(data.__typename).toBe('MailingAddress')
@@ -389,7 +351,6 @@ describe('useShopifyCustomer', () => {
 
     test('addressDefaultAddressUpdate should return the updated customer', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
-
       const { data } = await result.current.actions.addressDefaultAddressUpdate(
         'id'
       )
@@ -399,7 +360,6 @@ describe('useShopifyCustomer', () => {
 
     test('updateCustomer should return the updated customer', async () => {
       const { result } = renderHookWithClient(() => useShopifyCustomer('id'))
-
       const { data } = await result.current.actions.updateCustomer({})
 
       expect(data.__typename).toBe('Customer')
