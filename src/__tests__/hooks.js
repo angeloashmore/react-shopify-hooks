@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderHook, cleanup, act } from 'react-hooks-testing-library'
+import { renderHook, cleanup } from 'react-hooks-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
 
@@ -110,6 +110,9 @@ describe('useShopifyCustomerAccessToken', () => {
   })
 })
 
+/***
+ * useShopifyCheckout
+ */
 describe('useShopifyCheckout', () => {
   test('should not return a checkout if ID is not provided', async () => {
     const { result } = renderHookWithClient(() => useShopifyCheckout())
@@ -263,6 +266,9 @@ describe('useShopifyCheckout', () => {
   })
 })
 
+/***
+ * useShopifyCustomer
+ */
 describe('useShopifyCustomer', () => {
   test('should not return a customer if token is not provided', async () => {
     const { result } = renderHookWithClient(() => useShopifyCustomer())
