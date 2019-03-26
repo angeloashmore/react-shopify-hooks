@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderHook, cleanup } from 'react-hooks-testing-library'
+import { renderHook, cleanup, act } from 'react-hooks-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
 
@@ -11,6 +11,11 @@ import {
   useShopifyProduct,
   useShopifyProductVariant,
 } from '../index'
+
+// TODO: Remove console.error mock once the React `act` warning is resolved.
+// See https://github.com/mpeyper/react-hooks-testing-library/issues/14
+beforeEach(() => (console.error = jest.fn()))
+afterEach(() => console.error.mockClear())
 
 afterEach(cleanup)
 
