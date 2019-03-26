@@ -18,26 +18,25 @@ const initialState = {
 }
 
 const reducer = (state, action) => {
-  const reduced = { ...state }
   const { type, payload } = action
 
   switch (type) {
     case 'SET_CUSTOMER_ACCESS_TOKEN':
       return {
-        ...reduced,
+        ...state,
         customerAccessToken: payload.accessToken,
         customerAccessTokenExpiresAt: payload.expiresAt,
       }
 
     case 'SET_CHECKOUT_ID':
       return {
-        ...reduced,
+        ...state,
         checkoutId: payload,
       }
 
     case 'SET_CHECKOUT_LINE_ITEMS':
       return {
-        ...reduced,
+        ...state,
         checkoutLineItems: payload,
       }
 
@@ -45,7 +44,7 @@ const reducer = (state, action) => {
       return initialState
 
     default:
-      return reduced
+      throw new Error('Invalid action type. Please use a supported action.')
   }
 }
 
@@ -186,12 +185,9 @@ export const useShopifyCheckoutWithContext = (autoCreate = true) => {
 
   // If autoCreate is true, automatically create a new checkout if one is not
   // present.
-  useEffect(
-    () => {
-      if (autoCreate && !checkoutId) createCheckoutWithContext()
-    },
-    [checkoutId]
-  )
+  useEffect(() => {
+    if (autoCreate && !checkoutId) createCheckoutWithContext()
+  }, [checkoutId])
 
   return merge(useShopifyCheckoutResult, {
     actions: {
