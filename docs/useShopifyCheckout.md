@@ -4,7 +4,8 @@
 (checkoutId: String) => ({ checkout?: Checkout, loading: Boolean, error?: Error actions: Actions })
 ```
 
-Creates, renews, and deletes customer access tokens.
+Fetches a checkout using the provided checkout ID and provides actions for that
+checkout.
 
 ## Arguments
 
@@ -12,7 +13,7 @@ Creates, renews, and deletes customer access tokens.
 
 ## Return Fields
 
-- `product` - The Product object.
+- `checkout` - The Checkout object.
 - `loading` - Boolean stating if data fetching is in progress.
 - `error` - GraphQL or network error message.
 - `actions` - Object of actions. See **Actions** below for details.
