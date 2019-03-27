@@ -30,7 +30,7 @@ Fetches product data by product ID.
 
 #### Example
 
-```js
+```jsx
 import { useShopifyProduct } from 'react-shopify-hooks'
 
 // Basic card to display product title and description linked to the product's
@@ -101,7 +101,11 @@ const ProductVariantCard = ({ variantId }) => {
 () => ({ createCustomerAccessToken: Function, renewCustomerAccessToken: Function, deleteCustomerAccessToken: Function })
 ```
 
-Fetches product variant data by product variant ID.
+Creates, renews, and deletes customer access tokens.
+
+#### Arguments
+
+None
 
 #### Return Fields
 
@@ -135,7 +139,7 @@ Deletes a customer access token. `data` is the deleted token.
 
 #### Example
 
-```js
+```jsx
 import { Formik, Form, Field } from 'formik'
 import { useShopifyCustomerAccessToken } from 'react-shopify-hooks'
 
@@ -144,7 +148,7 @@ const SignInForm = () => {
   const [token, setToken] = useState(null)
   const { createCustomerAccessToken } = useShopifyCustomerAccessToken()
 
-  cosnt onSubmit = ({ email, password }, { setSubmitting }) => {
+  const onSubmit = ({ email, password }, { setSubmitting }) => {
     const { data } = createCustomerAccessToken(email, password)
     if (data && data.accessToken) setToken(data.accessToken)
     setSubmitting(false)
@@ -164,6 +168,93 @@ const SignInForm = () => {
         <button type="submit">Sign In</button>
       </Form>
     </Formik>
+  )
+}
+```
+
+---
+
+### useShopifyCheckout
+
+```
+(checkoutId: String) => ({ checkout?: Checkout, loading: Boolean, error?: Error actions: Actions })
+```
+
+Creates, renews, and deletes customer access tokens.
+
+#### Arguments
+
+- `checkoutId` - The ID of the Checkout to return.
+
+#### Return Fields
+
+- `product` - The Product object.
+- `loading` - Boolean stating if data fetching is in progress.
+- `error` - GraphQL or network error message.
+- `actions` - Object of actions. See **Actions** below for details.
+
+#### Actions
+
+##### createCheckout
+
+##### attributesUpdate
+
+##### customerAssociate
+
+##### customerDisassociate
+
+##### discountCodeApply
+
+##### discountCodeRemove
+
+##### emailUpdate
+
+##### giftCardsAppend
+
+##### giftCardRemove
+
+##### lineItemsReplace
+
+##### shippingAddressUpdate
+
+##### shippingLineUpdate
+
+```
+(shippingRateHandle: String) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Updates the shipping lines on the checkout.
+
+#### Example
+
+```jsx
+import { useShopifyCheckout } from 'react-shopify-hooks'
+
+// Create a new checkout and list its line items.
+const SignInForm = () => {
+  const [checkoutId, setCheckoutId] = useState(null)
+  const {
+    checkout,
+    loading,
+    actions: { createCheckout },
+  } = useShopifyCheckout(checkoutId)
+
+  useEffect(() => {
+    if (!checkoutId) createCheckout().then(({ data }) => setCheckoutId(data.id))
+  }, [checkoutId])
+
+  if (loading) return 'Loading'
+  if (error) return 'Error'
+
+  return (
+    <div>
+      <h2>Checkout items</h2>
+      <ul>
+        {checkout.lineItems.edges.map(({ node: lineItem }) => (
+          <li key={lineItem.id}>{lineItem.title}</li>
+        ))}
+      </ul>
+    </div>
   )
 }
 ```
