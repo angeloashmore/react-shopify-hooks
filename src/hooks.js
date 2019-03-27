@@ -70,7 +70,7 @@ export const ShopifyProvider = ({
  *
  * Returns direct access to the Apollo client for arbitrary query execution.
  */
-export { useApolloClient as useShopifyApolloClient }
+export const useShopifyApolloClient = useApolloClient
 
 /***
  * useShopifyProduct
@@ -173,7 +173,7 @@ export const useShopifyCustomerAccessToken = () => {
 export const useShopifyCheckout = checkoutId => {
   const { data, ...rest } = useQuery(QueryCheckoutNode, {
     variables: { id: checkoutId },
-    skip: !Boolean(checkoutId),
+    skip: !checkoutId,
     suspend: false,
   })
 
