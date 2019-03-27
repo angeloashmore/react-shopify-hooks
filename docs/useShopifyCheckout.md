@@ -21,25 +21,91 @@ Creates, renews, and deletes customer access tokens.
 
 ### createCheckout
 
+```
+(input: CheckoutCreateInput) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Creates a new checkout.
+
 ### attributesUpdate
+
+```
+(input: CheckoutAttributesUpdateV2Input) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Updates the attributes of the checkout.
 
 ### customerAssociate
 
+```
+(customerAccessToken: String) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Associates a customer to the checkout.
+
 ### customerDisassociate
+
+```
+() => ({ data: Checkout, errors: ?Error[] })
+```
+
+Disassociates the current checkout customer from the checkout.
 
 ### discountCodeApply
 
+```
+(discountCode: String) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Applies a discount to the checkout using a discount code.
+
 ### discountCodeRemove
+
+```
+() => ({ data: Checkout, errors: ?Error[] })
+```
+
+Removes the applied discount from the checkout.
 
 ### emailUpdate
 
+```
+(email: String) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Updates the email on the checkout.
+
 ### giftCardsAppend
+
+```
+(giftCardCodes: String[]) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Appends gift cards to the checkout.
 
 ### giftCardRemove
 
+```
+(giftCardId: String) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Removes an applied gift card from the checkout.
+
 ### lineItemsReplace
 
+```
+(lineItems: CheckoutLineItemInput) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Sets a list of line items to the checkout.
+
 ### shippingAddressUpdate
+
+```
+(shippingAddress: MailingAddressInput) => ({ data: Checkout, errors: ?Error[] })
+```
+
+Updates the shipping address of the checkout.
 
 ### shippingLineUpdate
 
