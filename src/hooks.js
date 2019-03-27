@@ -173,7 +173,7 @@ export const useShopifyCustomerAccessToken = () => {
 export const useShopifyCheckout = checkoutId => {
   const { data, ...rest } = useQuery(QueryCheckoutNode, {
     variables: { id: checkoutId },
-    skip: !Boolean(checkoutId),
+    skip: !checkoutId,
     suspend: false,
   })
 
