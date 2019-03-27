@@ -105,3 +105,104 @@ describe('useShopifyCustomerAccessTokenWithContext', () => {
     })
   })
 })
+
+/***
+ * useShopifyProductVariantWithContext
+ */
+describe('useShopifyProductVariantWithContext', () => {
+  describe('actions', () => {
+    // TODO: The following test only checks that the reducer's line items is
+    // updated since the checkout is mocked. We could perform a better test by
+    // spying on `checkout.replaceLineItems` to ensure it gets called with the
+    // correct attributes.
+    test('addToCheckout should add the product variant to the checkout', async () => {
+      const { result, waitForNextUpdate } = renderHookWithClient(() => ({
+        productVariant: useShopifyProductVariantWithContext('id'),
+        reducer: useShopifyReducer(),
+      }))
+
+      expect(result.current.reducer[0].checkoutLineItems).toHaveLength(0)
+
+      // Need to wait for several rerenders before checkout is ready.
+      await waitForNextUpdate()
+      await waitForNextUpdate()
+
+      act(() => result.current.productVariant.actions.addToCheckout())
+
+      // Need to wait for several rerenders as a result of multiple state changes.
+      await waitForNextUpdate()
+      await waitForNextUpdate()
+
+      expect(result.current.reducer[0].checkoutLineItems).toHaveLength(2)
+    })
+  })
+})
+
+/***
+ * useShopifyCustomerWithContext
+ */
+describe('useShopifyCustomerWithContext', () => {
+  describe('actions', () => {
+    test('activateCustomer should sign in the customer', async () => {
+      const { result, waitForNextUpdate } = renderHookWithClient(() => ({
+        customer: useShopifyCustomerWithContext(),
+        customerAccessToken: useShopifyCustomerAccessTokenWithContext(),
+      }))
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(false)
+
+      act(() =>
+        result.current.customer.actions.activateCustomer(
+          'id',
+          'activation token',
+          'password'
+        )
+      )
+
+      await waitForNextUpdate()
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(true)
+    })
+
+    test('resetCustomer should sign in the customer', async () => {
+      const { result, waitForNextUpdate } = renderHookWithClient(() => ({
+        customer: useShopifyCustomerWithContext(),
+        customerAccessToken: useShopifyCustomerAccessTokenWithContext(),
+      }))
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(false)
+
+      act(() =>
+        result.current.customer.actions.resetCustomer(
+          'id',
+          'reset token',
+          'password'
+        )
+      )
+
+      await waitForNextUpdate()
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(true)
+    })
+
+    test('resetCustomerByUrl should sign in the customer', async () => {
+      const { result, waitForNextUpdate } = renderHookWithClient(() => ({
+        customer: useShopifyCustomerWithContext(),
+        customerAccessToken: useShopifyCustomerAccessTokenWithContext(),
+      }))
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(false)
+
+      act(() =>
+        result.current.customer.actions.resetCustomerByUrl(
+          'reset url',
+          'password'
+        )
+      )
+
+      await waitForNextUpdate()
+
+      expect(result.current.customerAccessToken.isSignedIn).toBe(true)
+    })
+  })
+})
