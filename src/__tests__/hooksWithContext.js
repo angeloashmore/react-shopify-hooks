@@ -2,6 +2,7 @@ import React from 'react'
 import { renderHook, cleanup, act } from 'react-hooks-testing-library'
 
 import { createClient } from '../__testutils__/createClient'
+import { keysDeep } from '../__testutils__/keysDeep'
 
 import {
   ShopifyProviderWithContext,
@@ -11,6 +12,14 @@ import {
   useShopifyProductVariantWithContext,
   useShopifyReducer,
 } from '../hooksWithContext'
+
+import {
+  useShopifyCheckout,
+  useShopifyCustomer,
+  useShopifyCustomerAccessToken,
+  useShopifyProduct,
+  useShopifyProductVariant,
+} from '../hooks'
 
 // TODO: Remove console.error mock once the React `act` warning is resolved.
 // See https://github.com/mpeyper/react-hooks-testing-library/issues/14
@@ -42,6 +51,17 @@ const renderHookWithClient = (callback, client = defaultClient) =>
  * useShopifyCustomerAccessTokenWithContext
  */
 describe('useShopifyCustomerAccessTokenWithContext', () => {
+  test('should be a superset of non-context version', () => {
+    const { result } = renderHookWithClient(() => ({
+      withoutContext: useShopifyCustomerAccessToken(),
+      withContext: useShopifyCustomerAccessTokenWithContext(),
+    }))
+
+    expect(keysDeep(result.current.withContext)).toEqual(
+      expect.arrayContaining(keysDeep(result.current.withoutContext))
+    )
+  })
+
   test('should be signed out by default', async () => {
     const { result } = renderHookWithClient(() =>
       useShopifyCustomerAccessTokenWithContext()
@@ -110,6 +130,17 @@ describe('useShopifyCustomerAccessTokenWithContext', () => {
  * useShopifyProductVariantWithContext
  */
 describe('useShopifyProductVariantWithContext', () => {
+  test('should be a superset of non-context version', () => {
+    const { result } = renderHookWithClient(() => ({
+      withoutContext: useShopifyProductVariant(),
+      withContext: useShopifyProductVariantWithContext(),
+    }))
+
+    expect(keysDeep(result.current.withContext)).toEqual(
+      expect.arrayContaining(keysDeep(result.current.withoutContext))
+    )
+  })
+
   describe('actions', () => {
     // TODO: The following test only checks that the reducer's line items is
     // updated since the checkout is mocked. We could perform a better test by
@@ -142,6 +173,17 @@ describe('useShopifyProductVariantWithContext', () => {
  * useShopifyCustomerWithContext
  */
 describe('useShopifyCustomerWithContext', () => {
+  test('should be a superset of non-context version', () => {
+    const { result } = renderHookWithClient(() => ({
+      withoutContext: useShopifyCustomer(),
+      withContext: useShopifyCustomerWithContext(),
+    }))
+
+    expect(keysDeep(result.current.withContext)).toEqual(
+      expect.arrayContaining(keysDeep(result.current.withoutContext))
+    )
+  })
+
   describe('actions', () => {
     test('activateCustomer should sign in the customer', async () => {
       const { result, waitForNextUpdate } = renderHookWithClient(() => ({
