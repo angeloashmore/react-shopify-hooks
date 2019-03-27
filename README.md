@@ -231,7 +231,7 @@ Updates the shipping lines on the checkout.
 import { useShopifyCheckout } from 'react-shopify-hooks'
 
 // Create a new checkout and list its line items.
-const SignInForm = () => {
+const CheckoutItems = () => {
   const [checkoutId, setCheckoutId] = useState(null)
   const {
     checkout,
