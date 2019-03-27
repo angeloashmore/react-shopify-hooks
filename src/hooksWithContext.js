@@ -208,7 +208,7 @@ export const useShopifyProductVariantWithContext = variantId => {
   const useShopifyProductVariantResult = useShopifyProductVariant(variantId)
   const {
     actions: { lineItemsReplace },
-  } = useShopifyCheckout()
+  } = useShopifyCheckoutWithContext()
 
   return merge(useShopifyProductVariantResult, {
     actions: {
@@ -221,7 +221,7 @@ export const useShopifyProductVariantWithContext = variantId => {
 
         const lineItems = compose(
           getNodes,
-          get('lineItems')
+          get('data.lineItems')
         )(checkout)
 
         dispatch({ type: 'SET_CHECKOUT_LINE_ITEMS', payload: lineItems })
