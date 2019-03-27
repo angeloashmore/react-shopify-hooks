@@ -236,6 +236,7 @@ const SignInForm = () => {
   const {
     checkout,
     loading,
+    error,
     actions: { createCheckout },
   } = useShopifyCheckout(checkoutId)
 
