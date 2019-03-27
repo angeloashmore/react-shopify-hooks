@@ -10,9 +10,9 @@ npm install --save react-shopify-hooks
 
 ## API
 
-This package contains two sets of hooks: one set of hooks that keep a global
+This package contains two sets of hooks: one set of hooks that keeps a global
 context of the current checkout and customer and another set of hooks that
-provide low-level access to the Shopify API.
+provides low-level access to the Shopify API.
 
 **Recommended**: High-level context-aware hooks allowing easy checkout and
 customer management.
