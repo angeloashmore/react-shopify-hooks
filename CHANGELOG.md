@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.1](https://github.com/angeloashmore/react-shopify-hooks/compare/v0.3.0...v0.3.1) (2019-04-09)
+
+
+### Bug Fixes
+
+* correct checkout and items in useShopifyProductVariantWithContext ([ed0984e](https://github.com/angeloashmore/react-shopify-hooks/commit/ed0984e))
+* throw on invalid reducer action type ([8a1e6b3](https://github.com/angeloashmore/react-shopify-hooks/commit/8a1e6b3))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/angeloashmore/react-shopify-hooks/compare/v0.2.2...v0.3.0) (2019-02-02)
 
