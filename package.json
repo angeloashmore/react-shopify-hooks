@@ -1,6 +1,6 @@
 {
   "name": "react-shopify-hooks",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Collection of React hooks for interacting with the Shopify API",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
