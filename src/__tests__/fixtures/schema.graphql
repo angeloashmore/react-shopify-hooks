@@ -108,6 +108,9 @@ type Article implements Node {
   """The date and time when the article was published."""
   publishedAt: DateTime!
 
+  """The article’s SEO information."""
+  seo: SEO
+
   """A categorization that a article can be tagged with."""
   tags: [String!]!
 
@@ -520,7 +523,10 @@ type CheckoutAttributesUpdatePayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Specifies the fields required to update a checkout's attributes."""
@@ -571,11 +577,14 @@ type CheckoutCompleteWithCreditCardPayload {
   """The checkout on which the payment was applied."""
   checkout: Checkout!
 
+  """List of errors that occurred executing the mutation."""
+  checkoutUserErrors: [CheckoutUserError!]!
+
   """A representation of the attempted payment."""
   payment: Payment
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutCompleteWithCreditCardV2` mutation."""
@@ -598,11 +607,14 @@ type CheckoutCompleteWithTokenizedPaymentPayload {
   """The checkout on which the payment was applied."""
   checkout: Checkout!
 
+  """List of errors that occurred executing the mutation."""
+  checkoutUserErrors: [CheckoutUserError!]!
+
   """A representation of the attempted payment."""
   payment: Payment
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutCompleteWithTokenizedPaymentV2` mutation."""
@@ -610,11 +622,14 @@ type CheckoutCompleteWithTokenizedPaymentV2Payload {
   """The checkout on which the payment was applied."""
   checkout: Checkout
 
+  """List of errors that occurred executing the mutation."""
+  checkoutUserErrors: [CheckoutUserError!]!
+
   """A representation of the attempted payment."""
   payment: Payment
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Specifies the fields required to create a checkout."""
@@ -692,7 +707,10 @@ type CheckoutCustomerDisassociatePayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutCustomerDisassociateV2` mutation."""
@@ -713,7 +731,10 @@ type CheckoutDiscountCodeApplyPayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutDiscountCodeApplyV2` mutation."""
@@ -746,7 +767,10 @@ type CheckoutEmailUpdatePayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutEmailUpdateV2` mutation."""
@@ -878,7 +902,10 @@ type CheckoutGiftCardRemovePayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutGiftCardRemoveV2` mutation."""
@@ -905,9 +932,7 @@ type CheckoutGiftCardsAppendPayload {
   userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
-"""
-A single line item in the checkout, grouped by variant and attributes.
-"""
+"""A single line item in the checkout, grouped by variant and attributes."""
 type CheckoutLineItem implements Node {
   """
   Extra information in the form of an array of Key-Value pairs about the line item.
@@ -1028,7 +1053,10 @@ type CheckoutShippingAddressUpdatePayload {
   checkout: Checkout!
 
   """List of errors that occurred executing the mutation."""
-  userErrors: [UserError!]!
+  checkoutUserErrors: [CheckoutUserError!]!
+
+  """List of errors that occurred executing the mutation."""
+  userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead")
 }
 
 """Return type for `checkoutShippingAddressUpdateV2` mutation."""
@@ -2099,6 +2127,9 @@ enum CurrencyCode {
   """Belize Dollar (BZD)."""
   BZD
 
+  """Bermudian Dollar (BMD)."""
+  BMD
+
   """Bhutanese Ngultrum (BTN)."""
   BTN
 
@@ -2323,6 +2354,9 @@ enum CurrencyCode {
 
   """Omani Rial (OMR)."""
   OMR
+
+  """Panamian Balboa (PAB)."""
+  PAB
 
   """Pakistani Rupee (PKR)."""
   PKR
@@ -2568,9 +2602,7 @@ type CustomerAccessToken {
   expiresAt: DateTime!
 }
 
-"""
-Specifies the input fields required to create a customer access token.
-"""
+"""Specifies the input fields required to create a customer access token."""
 input CustomerAccessTokenCreateInput {
   """The email associated to the customer."""
   email: String!
@@ -2877,16 +2909,16 @@ scalar Decimal
 Digital wallet, such as Apple Pay, which can be used for accelerated checkouts.
 """
 enum DigitalWallet {
-  """Apple Pay"""
+  """Apple Pay."""
   APPLE_PAY
 
-  """Android Pay"""
+  """Android Pay."""
   ANDROID_PAY
 
-  """Google Pay"""
+  """Google Pay."""
   GOOGLE_PAY
 
-  """Shopify Pay"""
+  """Shopify Pay."""
   SHOPIFY_PAY
 }
 
@@ -3112,11 +3144,16 @@ type Image {
   """A unique identifier for the image."""
   id: ID
 
-  """The location of the original (untransformed) image as a URL."""
+  """
+  The location of the original image as a URL.
+  
+  If there are any existing transformations in the original source URL, they will remain and not be stripped.
+  
+  """
   originalSrc: URL!
 
   """The location of the image as a URL."""
-  src: URL! @deprecated(reason: "Previously an image had a single `src` field. This could either return the original image\nlocation or a URL that contained transformations such as sizing or scale.\n\nThese transformations were specified by arguments on the parent field.\n\nNow an image has two distinct URL fields: `originalSrc` and `transformedSrc`.\n\n* `originalSrc` - the original, untransformed image URL\n* `transformedSrc` - the image URL with transformations included\n\nTo migrate to the new fields, image transformations should be moved from the parent field to `transformedSrc`.\n\nBefore:\n```graphql\n{\n  shop {\n    productImages(maxWidth: 200, scale: 2) {\n      edges {\n        node {\n          src\n        }\n      }\n    }\n  }\n}\n```\n\nAfter:\n```graphql\n{\n  shop {\n    productImages {\n      edges {\n        node {\n          transformedSrc(maxWidth: 200, scale: 2)\n        }\n      }\n    }\n  }\n}\n```\n")
+  src: URL! @deprecated(reason: "Previously an image had a single `src` field. This could either return the original image\nlocation or a URL that contained transformations such as sizing or scale.\n\nThese transformations were specified by arguments on the parent field.\n\nNow an image has two distinct URL fields: `originalSrc` and `transformedSrc`.\n\n* `originalSrc` - the original unmodified image URL\n* `transformedSrc` - the image URL with the specified transformations included\n\nTo migrate to the new fields, image transformations should be moved from the parent field to `transformedSrc`.\n\nBefore:\n```graphql\n{\n  shop {\n    productImages(maxWidth: 200, scale: 2) {\n      edges {\n        node {\n          src\n        }\n      }\n    }\n  }\n}\n```\n\nAfter:\n```graphql\n{\n  shop {\n    productImages {\n      edges {\n        node {\n          transformedSrc(maxWidth: 200, scale: 2)\n        }\n      }\n    }\n  }\n}\n```\n")
 
   """
   The location of the transformed image as a URL.
@@ -4055,6 +4092,12 @@ type PaymentSettings {
   """The three-letter code for the currency that the shop accepts."""
   currencyCode: CurrencyCode!
 
+  """
+  A list of enabled currencies (ISO 4217 format) that the shop accepts.
+  Merchants can enable currencies from their Shopify Payments settings in the Shopify admin.
+  """
+  enabledPresentmentCurrencies: [CurrencyCode!]!
+
   """The shop’s Shopify Payments account id."""
   shopifyPaymentsAccountId: String
 
@@ -4738,6 +4781,7 @@ type QueryRoot {
 
     """
     Supported filter parameters:
+     - `available_for_sale`
      - `created_at`
      - `product_type`
      - `tag`
@@ -4766,13 +4810,16 @@ type ScriptDiscountApplication implements DiscountApplication {
   allocationMethod: DiscountApplicationAllocationMethod!
 
   """The description of the application as defined by the Script."""
-  description: String!
+  description: String! @deprecated(reason: "Use `title` instead")
 
   """Which lines of targetType that the discount is allocated over."""
   targetSelection: DiscountApplicationTargetSelection!
 
   """The type of line that the discount is applicable towards."""
   targetType: DiscountApplicationTargetType!
+
+  """The title of the application as defined by the Script."""
+  title: String!
 
   """The value of the discount application."""
   value: PricingValue!
@@ -4798,6 +4845,15 @@ input SelectedOptionInput {
 
   """The product option’s value."""
   value: String!
+}
+
+"""SEO information."""
+type SEO {
+  """The meta description."""
+  description: String
+
+  """The SEO title."""
+  title: String
 }
 
 """A shipping rate to be applied to a checkout."""
@@ -4988,6 +5044,7 @@ type Shop {
 
     """
     Supported filter parameters:
+     - `available_for_sale`
      - `created_at`
      - `product_type`
      - `tag`
@@ -5125,10 +5182,13 @@ type Transaction {
   """The kind of the transaction."""
   kind: TransactionKind!
 
-  """The status of the transaction"""
-  status: TransactionStatus!
+  """The status of the transaction."""
+  status: TransactionStatus! @deprecated(reason: "Use `statusV2` instead")
 
-  """Whether the transaction was done in test mode or not"""
+  """The status of the transaction."""
+  statusV2: TransactionStatus
+
+  """Whether the transaction was done in test mode or not."""
   test: Boolean!
 }
 
